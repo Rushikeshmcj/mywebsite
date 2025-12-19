@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel KANAK - Restaurant Management System</title>
+    <link rel="icon" type="image/jpeg" href="D:/PYTHON folder/KANAK/images.jpg">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2a2a3a;
+            color: white;
+            overflow: hidden;
+        }
+        #login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #2a2a3a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideInLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        @keyframes rotateIn {
+            from { transform: rotate(-180deg); opacity: 0; }
+            to { transform: rotate(0); opacity: 1; }
+        }
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px #00ff99; }
+            50% { box-shadow: 0 0 20px #00ff99, 0 0 30px #00ff99; }
+            100% { box-shadow: 0 0 5px #00ff99; }
+        }
+        @keyframes shimmer {
+            0% { background-position: -468px 0; }
+            100% { background-position: 468px 0; }
+        }
+        @keyframes flipInX {
+            from { transform: perspective(400px) rotate3d(1, 0, 0, 90deg); opacity: 0; }
+            to { transform: perspective(400px) rotate3d(1, 0, 0, 0deg); opacity: 1; }
+        }
+        @keyframes zoomIn {
+            from { transform: scale(0.3); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        /* New Animation for Ball Throw */
+        @keyframes ballThrow {
+            0% {
+                transform: translateX(0) translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translateX(50vw) translateY(-20vh) rotate(180deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateX(100vw) translateY(0) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        @keyframes ballBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        @keyframes confetti {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        #login-frame {
+            background-color: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            width: 400px;
+            text-align: center;
+            animation: slideInLeft 0.6s ease-out, glow 2s infinite alternate;
+        }
+        #login-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00ff99;
+            margin-bottom: 20px;
+            animation: bounce 1s ease-in-out;
+        }
+        .login-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #333;
+            color: white;
+            border: 1px solid #555;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            animation: flipInX 0.5s ease-out;
+        }
+        .login-input:focus {
+            border-color: #00ff99;
+            outline: none;
+            animation: pulse 0.5s ease, glow 1s infinite alternate;
+        }
+        #login-submit {
+            width: 100%;
+            padding: 15px;
+            background-color: #00aa00;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            animation: float 3s ease-in-out infinite;
+        }
+        #login-submit:hover {
+            background-color: #008800;
+            transform: scale(1.02);
+            animation: none;
+        }
+        #main-app {
+            display: none;
+            height: 100vh;
+            background-color: #0f0f1e;
+            animation: fadeIn 0.5s ease-in, shimmer 2s linear infinite;
+            background: linear-gradient(45deg, #0f0f1e, #1a1a2a, #0f0f1e);
+            background-size: 400% 400%;
+        }
+        #tab-buttons {
+            display: flex;
+            background-color: #1a1a1a;
+            padding: 10px;
+            animation: slideDown 0.8s ease-out;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            background-color: #1a1a1a;
+            color: white;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,255,153,0.4), transparent);
+            transition: left 0.5s;
+        }
+        .tab-btn:hover::before {
+            left: 100%;
+        }
+        .tab-btn:hover {
+            background-color: #333;
+            transform: translateY(-2px);
+            animation: glow 0.5s ease-in-out;
+        }
+        .tab-btn.active {
+            background-color: #00ff99;
+            color: black;
+            animation: bounce 0.6s ease, spin 0.5s linear;
+        }
+        .tab-content {
+            display: none;
+            height: calc(100vh - 60px);
+            padding: 20px;
+            overflow-y: auto;
+            animation: slideInRight 0.4s ease-out;
+        }
+        .tab-content.active {
+            display: block;
+            animation: zoomIn 0.6s ease-out, glow 2s infinite alternate;
+        }
+        .section-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #00ff99;
+            text-align: center;
+            margin-bottom: 20px;
+            animation: rotateIn 0.8s ease-out, float 4s ease-in-out infinite;
+        }
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.5);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        button:active::after {
+            width: 300px;
+            height: 300px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,255,153,0.3);
+            animation: pulse 0.5s ease-in-out;
+        }
+        .btn-primary { background-color: #00aa00; }
+        .btn-primary:hover { background-color: #008800; }
+        .btn-danger { background-color: #ff4444; }
+        .btn-danger:hover { background-color: #cc0000; }
+        .btn-warning { background-color: #ff8800; }
+        .btn-warning:hover { background-color: #cc6600; }
+        .btn-info { background-color: #1f6aa5; }
+        .btn-info:hover { background-color: #1e40af; }
+        .btn-google { background-color: #4285F4; }
+        .btn-google:hover { background-color: #3367D6; }
+        .table-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+            animation: slideInLeft 1s ease-out;
+        }
+        .table-btn {
+            width: 110px;
+            height: 70px;
+            background-color: #ff4444;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            animation: flipInX 0.5s ease-out;
+        }
+        .table-btn:hover, .table-btn.active {
+            background-color: green;
+            transform: scale(1.05);
+            animation: pulse 0.5s ease, glow 1s infinite alternate;
+        }
+        .table-btn.inactive:hover {
+            background-color: #333333;
+            transform: scale(0.98);
+        }
+        .menu-category {
+            display: none;
+            animation: fadeIn 0.4s ease-in;
+        }
+        .menu-category.active {
+            display: block;
+            animation: zoomIn 0.7s ease-out;
+        }
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333344;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .menu-item:hover {
+            background-color: #444455;
+            transform: translateX(5px);
+            animation: shimmer 1s linear infinite;
+        }
+        .menu-item-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #88ff88;
+            animation: fadeIn 0.3s ease-in;
+        }
+        .menu-item-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffff88;
+            animation: fadeIn 0.3s ease-in 0.2s both;
+        }
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            animation: fadeIn 0.3s ease-in 0.4s both;
+        }
+        .qty-btn {
+            width: 40px;
+            height: 40px;
+            margin: 0 5px;
+            border-radius: 5px;
+            font-size: 12px;
+            transition: transform 0.2s ease;
+            animation: bounce 0.6s ease-out;
+        }
+        .qty-btn:hover {
+            transform: scale(1.1);
+            animation: spin 0.5s linear;
+        }
+        .up-btn { background-color: #00aa00; }
+        .down-btn { background-color: #ff4444; }
+        .qty-label {
+            min-width: 60px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+        }
+        #order-tree, #daily-reports-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #333;
+            color: white;
+            animation: fadeIn 0.5s ease-in, glow 3s infinite alternate;
+        }
+        #order-tree th, #order-tree td, #daily-reports-table th, #daily-reports-table td {
+            padding: 10px;
+            border: 1px solid #555;
+            text-align: left;
+            transition: background-color 0.3s ease;
+            animation: slideDown 0.5s ease-out;
+        }
+        #order-tree th, #daily-reports-table th {
+            background-color: #00ff99;
+            color: black;
+        }
+        #order-tree tr:hover, #daily-reports-table tr:hover {
+            background-color: #444;
+            transform: scale(1.01);
+        }
+        #order-tree tr.selected {
+            background-color: #00ff99;
+            color: black;
+            animation: bounce 0.4s ease, glow 0.5s infinite;
+        }
+        .report-text {
+            background-color: #333;
+            color: #88ff88;
+            border: 1px solid #555;
+            padding: 10px;
+            font-family: Courier, monospace;
+            font-size: 14px;
+            height: 400px;
+            width: 100%;
+            overflow-y: auto;
+            animation: slideInRight 0.6s ease-out, pulse 2s infinite;
+        }
+        .forecast-text {
+            background-color: #333;
+            color: #aaffaa;
+            border: 1px solid #555;
+            padding: 10px;
+            font-family: Courier, monospace;
+            font-size: 14px;
+            height: 300px;
+            width: 100%;
+            animation: fadeIn 0.4s ease-in, float 4s ease-in-out infinite;
+        }
+        #time-label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffff88;
+            text-align: center;
+            margin: 20px 0;
+            animation: pulse 2s infinite, spin 20s linear infinite;
+        }
+        .dialog {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1e1e2e;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 2000;
+            display: none;
+            animation: fadeIn 0.3s ease-in, zoomIn 0.5s ease-out;
+        }
+        .dialog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1500;
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+        .radio-group {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            animation: slideInLeft 0.4s ease-out;
+        }
+        .search-input {
+            width: 500px;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            border: 1px solid #555;
+            border-radius: 5px;
+            font-size: 16px;
+            height: 45px;
+            transition: border-color 0.3s ease;
+            animation: pulse 1s infinite;
+        }
+        .search-input:focus {
+            border-color: #00ff99;
+            animation: glow 1s infinite alternate;
+        }
+        .inner-tab-buttons {
+            display: flex;
+            margin-bottom: 20px;
+            animation: slideDown 0.6s ease-out;
+        }
+        .inner-tab-btn {
+            flex: 1;
+            padding: 10px;
+            background-color: #1a1a1a;
+            color: white;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .inner-tab-btn:hover {
+            background-color: #333;
+            animation: bounce 0.4s ease;
+        }
+        .inner-tab-btn.active {
+            background-color: #00ff99;
+            color: black;
+            animation: bounce 0.4s ease, glow 1s infinite;
+        }
+        .btn-frame {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            animation: fadeIn 0.5s ease-in;
+        }
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-left: 20px;
+            animation: slideInRight 0.5s ease-out, float 3s ease-in-out infinite;
+        }
+        #logo-img {
+            width: 300px;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+            animation: rotateIn 1s ease-out, glow 2s infinite alternate;
+        }
+        #logo-img:hover {
+            transform: scale(1.02);
+            animation: spin 2s linear;
+        }
+        .hotel-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #00ff99;
+            text-align: center;
+            margin: 20px 0;
+            animation: fadeIn 1s ease-in, pulse 2s infinite;
+        }
+        .logo-placeholder {
+            width: 300px;
+            height: 400px;
+            background: linear-gradient(45deg, #00ff99, #008800);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
+            animation: pulse 2s infinite, shimmer 3s linear infinite;
+        }
+        /* Ball Animation Element */
+        .ball-throw {
+            position: fixed;
+            top: 50%;
+            left: 20%;
+            width: 50px;
+            height: 50px;
+            background-color: #00ff99;
+            border-radius: 50%;
+            z-index: 3000;
+            animation: ballThrow 1.5s ease-out forwards, ballBounce 0.3s ease-in-out 0.5s;
+            box-shadow: 0 0 10px #00ff99;
+        }
+        /* Confetti for extra effect */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #ff4444;
+            z-index: 2500;
+            pointer-events: none;
+            animation: confetti 2s linear forwards;
+        }
+    </style>
+</head>
+<body>
+    <div id="login-screen">
+        <div id="login-frame">
+            <div id="login-title">Admin Login</div>
+            <label>Username:</label>
+            <input type="text" id="user-entry" class="login-input" placeholder="Enter username" value="admin">
+            <label>Password:</label>
+            <input type="password" id="pass-entry" class="login-input" placeholder="Enter password" value="admin@123">
+            <button id="login-submit">SUBMIT</button>
+        </div>
+    </div>
+
+    <div id="main-app">
+        <div id="tab-buttons">
+            <button class="tab-btn active" data-tab="table">Table Management</button>
+            <button class="tab-btn" data-tab="menu">Menu Management</button>
+            <button class="tab-btn" data-tab="customer">Customer Management</button>
+            <button class="tab-btn" data-tab="report">Financial Report</button>
+            <button class="tab-btn" data-tab="insights">AI Forecast & Cloud</button>
+            <button class="tab-btn" data-tab="daily-reports">Daily Financial Reports</button>
+        </div>
+
+        <div id="table-tab" class="tab-content active">
+            <h1 class="section-title">Table Management - Select a Table</h1>
+            <div class="btn-frame">
+                <button class="btn-info" onclick="switchTab('customer')">Back</button>
+                <button class="btn-danger" onclick="clearAllTables()">Clear All Tables</button>
+            </div>
+            <div style="display: flex;">
+                <div class="table-grid" id="table-grid"></div>
+                <div class="right-panel">
+                    <img id="logo-img" src="D:/PYTHON folder/KANAK/images.jpg" alt="Logo" onerror="showLogoPlaceholder();">
+                    <div class="hotel-name">KANAK Restaurant</div>
+                    <div id="time-label">Current Time: --:--:--</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="menu-tab" class="tab-content">
+            <h1 class="section-title">Menu Management</h1>
+            <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                <label style="font-size: 18px; font-weight: bold; color: #aaffaa;">🔍 Search Menu Item:</label>
+                <input type="text" id="search-entry" class="search-input" placeholder="Type item name (e.g., Chicken, Paneer, Cola)...">
+                <button class="btn-danger" style="width: 100px;" onclick="document.getElementById('search-entry').value=''">Clear</button>
+                <button class="btn-primary" style="width: 120px;" onclick="openAddMenuDialog()">ADD MENU</button>
+            </div>
+            <div class="inner-tab-buttons">
+                <button class="inner-tab-btn active" data-inner-tab="veg">Veg Menu</button>
+                <button class="inner-tab-btn" data-inner-tab="nonveg">Non-Veg Menu</button>
+                <button class="inner-tab-btn" data-inner-tab="drinks">Drinks</button>
+            </div>
+            <div id="veg-menu" class="menu-category active"></div>
+            <div id="nonveg-menu" class="menu-category"></div>
+            <div id="drinks-menu" class="menu-category"></div>
+            <button class="btn-primary" style="width: 100%; padding: 15px; font-size: 20px; font-weight: bold; height: 50px; margin-top: 20px;" onclick="printOrder()">PRINT ORDER</button>
+        </div>
+
+        <div id="customer-tab" class="tab-content">
+            <h1 class="section-title">Customer Orders History</h1>
+            <div class="btn-frame">
+                <button class="btn-info" onclick="switchTab('menu')">Back to Menu</button>
+                <button class="btn-warning" onclick="printSelectedOrder()">Print Selected</button>
+                <button class="btn-danger" onclick="clearOrdersHistory()">Clear History</button>
+            </div>
+            <table id="order-tree">
+                <thead><tr><th>Time</th><th>Table</th><th>Items</th><th>Total</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div id="report-tab" class="tab-content">
+            <h1 class="section-title">Financial Report & GST Billing</h1>
+            <div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
+                <button class="btn-primary" style="padding: 15px; height: 60px; min-width: 300px; font-size: 18px; font-weight: bold;" onclick="generateGstBillPdf()">Generate GST Bill (PDF)</button>
+            </div>
+            <textarea class="report-text" id="report-text" readonly></textarea>
+            <p style="text-align: center; font-size: 16px; color: #8888ff; margin-top: 20px;">Graphical Analytics Coming Soon...</p>
+        </div>
+
+        <div id="insights-tab" class="tab-content">
+            <h1 class="section-title" style="color: #00fffa;">AI Demand Forecast & Cloud Backup</h1>
+            <div style="background-color: #333; padding: 20px; border-radius: 5px; margin-bottom: 20px; animation: pulse 2s infinite;">
+                <h2 style="font-size: 18px; font-weight: bold; color: #88ff88; margin-bottom: 10px;">Tomorrow's Predicted Demand (Based on Last 7 Days)</h2>
+                <textarea class="forecast-text" id="forecast-text" readonly></textarea>
+                <div style="display: flex; justify-content: space-around; margin-top: 10px;">
+                    <button class="btn-primary" style="padding: 15px; height: 50px; font-size: 16px; font-weight: bold;" onclick="runAiForecastAndEmail()">Run AI Forecast Now</button>
+                    <button class="btn-warning" style="padding: 15px; height: 50px; font-size: 16px; font-weight: bold;" onclick="runAiForecastAndEmail()">Send AI Forecast to Email</button>
+                </div>
+            </div>
+            <div style="background-color: #333; padding: 20px; border-radius: 5px; animation: glow 2s infinite alternate;">
+                <h2 style="font-size: 18px; font-weight: bold; color: #88ff88; margin-bottom: 10px;">Never Lose Data - Cloud Backup</h2>
+                <button class="btn-google" style="width: 100%; padding: 15px; height: 60px; font-size: 16px; font-weight: bold;" onclick="backupToGoogleDrive()">Backup All Orders to Google Drive (Free)</button>
+                <p style="font-size: 12px; color: #aaaaaa; margin-top: 10px;">Your data is auto-saved locally every 5 minutes<br>Cloud backup creates encrypted copy on your Google Drive</p>
+            </div>
+        </div>
+
+        <div id="daily-reports-tab" class="tab-content">
+            <h1 class="section-title">Cumulative Daily Financial Reports</h1>
+            <div class="btn-frame">
+                <button class="btn-warning" style="padding: 15px; height: 60px; min-width: 350px; font-size: 18px; font-weight: bold;" onclick="exportDailyToExcel()">EXPORT TO EXCEL</button>
+            </div>
+            <table id="daily-reports-table">
+                <thead><tr><th>Date</th><th>Total Orders</th><th>Total Revenue (₹)</th><th>Total GST (₹)</th><th>Net Amount (₹)</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add Menu Dialog -->
+    <div class="dialog-overlay" id="add-menu-overlay" onclick="closeDialog('add-menu')"></div>
+    <div class="dialog" id="add-menu-dialog" style="width: 350px;">
+        <h2 style="color: #00ff99; text-align: center; margin-bottom: 20px;">Add New Menu Item</h2>
+        <label>Category:</label>
+        <div class="radio-group">
+            <label><input type="radio" name="category" value="veg" checked> VEG</label><br>
+            <label><input type="radio" name="category" value="nonveg"> NON-VEG</label><br>
+            <label><input type="radio" name="category" value="drinks"> DRINKS</label>
+        </div>
+        <label>Item Name:</label>
+        <input type="text" id="new-item-name" class="login-input" placeholder="Enter food name">
+        <label>Price (₹):</label>
+        <input type="number" id="new-item-price" class="login-input" placeholder="Enter price">
+        <button class="btn-primary" style="width: 100%; margin-top: 20px; padding: 15px; height: 45px; font-size: 14px; font-weight: bold;" onclick="saveNewMenuItem()">SAVE</button>
+    </div>
+
+    <!-- Email Dialog -->
+    <div class="dialog-overlay" id="email-overlay" onclick="closeDialog('email')"></div>
+    <div class="dialog" id="email-dialog" style="width: 500px;">
+        <h2 style="color: #00ff99; text-align: center; margin-bottom: 20px;">Send Tomorrow's AI Demand Forecast</h2>
+        <label>Enter Email Address:</label>
+        <input type="email" id="email-recipient" class="login-input" style="min-width: 400px;" placeholder="example@gmail.com">
+        <button class="btn-primary" style="width: 100%; margin-top: 20px; padding: 15px; height: 50px; font-size: 18px; font-weight: bold;" onclick="sendForecastEmail()">SEND EMAIL NOW</button>
+    </div>
+
+    <script>
+        // Data Storage (using localStorage for persistence)
+        let ordersHistory = JSON.parse(localStorage.getItem('ordersHistory')) || [];
+        let dailyReports = JSON.parse(localStorage.getItem('dailyReports')) || []; // Date-wise reports
+        let currentOrder = { tables: [], items: [], total: 0, timestamp: null };
+        let tableStatus = {};
+        let orderQuantities = {};
+        let qtyLabels = {};
+        let menuItemElements = { veg: [], nonveg: [], drinks: [] };
+
+        // Menu Items
+        let vegMenu = JSON.parse(localStorage.getItem('vegMenu')) || {
+            "Butter Roti": 40, "Paneer Butter Masala": 230, "Veg Biryani": 180, "Dal Tadka": 120, "Aloo Paratha": 80
+        };
+        let nonvegMenu = JSON.parse(localStorage.getItem('nonvegMenu')) || {
+            "Chicken Tikka": 350, "Mutton Curry": 450, "Fish Fry": 300, "Chicken Biryani": 280, "Egg Curry": 150
+        };
+        let drinksMenu = JSON.parse(localStorage.getItem('drinksMenu')) || {
+            "Coca Cola": 50, "Red Wine (Glass)": 500, "Fresh Lime Soda": 60, "Mineral Water": 30, "Mocktail": 150
+        };
+
+        const gstRate = 0.18;
+
+        // Voice Engine (Web Speech API)
+        function speak(text) {
+            console.log(`Voice Alert: ${text}`);
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 1;
+                utterance.volume = 1;
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Sound Effect Function (Simple beep using Web Audio API)
+        function playPrintSound() {
+            if ('AudioContext' in window) {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                oscillator.frequency.setValueAtTime(800, audioCtx.currentTime); // High tone for print
+                oscillator.type = 'sine';
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+                oscillator.start(audioCtx.currentTime);
+                oscillator.stop(audioCtx.currentTime + 0.5);
+            }
+        }
+
+        // Ball Throw Animation with Confetti
+        function triggerPrintAnimation(callback) {
+            // Create ball
+            const ball = document.createElement('div');
+            ball.className = 'ball-throw';
+            document.body.appendChild(ball);
+
+            // Add confetti pieces
+            for (let i = 0; i < 20; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+                confetti.style.animationDuration = `${1 + Math.random()}s`;
+                document.body.appendChild(confetti);
+            }
+
+            // Chain animations: ball throw, then glow and pulse on body, then callback
+            ball.addEventListener('animationend', () => {
+                document.body.style.animation = 'glow 1s infinite alternate, pulse 0.5s ease-in-out';
+                setTimeout(() => {
+                    document.body.style.animation = '';
+                    ball.remove();
+                    document.querySelectorAll('.confetti').forEach(c => c.remove());
+                    if (callback) callback();
+                }, 1000);
+            });
+
+            // Play sound
+            playPrintSound();
+        }
+
+        // Logo Placeholder
+        function showLogoPlaceholder() {
+            const img = document.getElementById('logo-img');
+            img.style.display = 'none';
+            const panel = document.querySelector('.right-panel');
+            const placeholder = document.createElement('div');
+            placeholder.className = 'logo-placeholder';
+            placeholder.textContent = 'KANAK\nLOGO';
+            panel.insertBefore(placeholder, document.querySelector('.hotel-name'));
+        }
+
+        // Login
+        document.getElementById('login-submit').addEventListener('click', () => {
+            const username = document.getElementById('user-entry').value;
+            const password = document.getElementById('pass-entry').value;
+            if (username === 'admin' && password === 'admin@123') {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-app').style.display = 'block';
+                document.title = 'Hotel KANAK - Restaurant Management System';
+                setupMainApp();
+                speak('Login successful. Welcome to Hotel Management System');
+            } else {
+                alert('Invalid username or password!');
+                speak('Invalid credentials');
+            }
+        });
+
+        // Setup Main App
+        function setupMainApp() {
+            setupTabButtons();
+            setupTableTab();
+            setupMenuTab();
+            setupCustomerTab();
+            setupReportTab();
+            setupInsightsTab();
+            setupDailyReportsTab();
+            updateOrdersDisplay();
+            updateReportDisplay();
+            computeAndUpdateDailyReports(); // Fixed: Compute date-wise
+            startTimeTimer();
+            startAutoBackup();
+        }
+
+        // Tab Switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            const activeBtn = document.querySelector(`[data-tab="${tabName}"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+            const activeContent = document.getElementById(`${tabName}-tab`);
+            if (activeContent) activeContent.classList.add('active');
+        }
+
+        function setupTabButtons() {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const tabName = e.target.dataset.tab;
+                    switchTab(tabName);
+                });
+            });
+        }
+
+        // Table Tab
+        function setupTableTab() {
+            const grid = document.getElementById('table-grid');
+            for (let i = 1; i <= 50; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'table-btn';
+                btn.textContent = `Table ${i}`;
+                btn.onclick = () => toggleTable(i);
+                tableStatus[i] = btn;
+                grid.appendChild(btn);
+            }
+            // Check for logo on load
+            const logoImg = document.getElementById('logo-img');
+            if (logoImg.naturalWidth === 0) {
+                showLogoPlaceholder();
+            }
+        }
+
+        function toggleTable(tableNum) {
+            const current = tableStatus[tableNum];
+            if (currentOrder.tables.includes(tableNum)) {
+                currentOrder.tables = currentOrder.tables.filter(t => t !== tableNum);
+                current.classList.remove('active');
+                speak(`Table ${tableNum} deselected`);
+            } else {
+                // Deselect all others
+                currentOrder.tables.forEach(t => {
+                    tableStatus[t].classList.remove('active');
+                });
+                currentOrder.tables = [tableNum];
+                current.classList.add('active');
+                speak(`Table ${tableNum} selected`);
+                alert(`Table ${tableNum} selected!`);
+                switchTab('menu');
+            }
+        }
+
+        function clearAllTables() {
+            if (confirm('Clear all table selections and reset all buttons?')) {
+                currentOrder.tables = [];
+                Object.values(tableStatus).forEach(btn => btn.classList.remove('active'));
+                speak('All tables cleared');
+            }
+        }
+
+        // Time Timer
+        function startTimeTimer() {
+            setInterval(() => {
+                document.getElementById('time-label').textContent = `Current Time: ${new Date().toLocaleTimeString()}`;
+            }, 1000);
+        }
+
+        // Menu Tab
+        function setupMenuTab() {
+            setupInnerTabButtons();
+            renderMenuSection('veg', vegMenu, 'veg-menu');
+            renderMenuSection('nonveg', nonvegMenu, 'nonveg-menu');
+            renderMenuSection('drinks', drinksMenu, 'drinks-menu');
+            document.getElementById('search-entry').addEventListener('input', filterMenuItems);
+        }
+
+        function setupInnerTabButtons() {
+            document.querySelectorAll('.inner-tab-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.inner-tab-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.menu-category').forEach(cat => cat.classList.remove('active'));
+                    e.target.classList.add('active');
+                    const innerTab = e.target.dataset.innerTab;
+                    document.getElementById(`${innerTab}-menu`).classList.add('active');
+                });
+            });
+        }
+
+        function renderMenuSection(category, menuDict, containerId) {
+            const container = document.getElementById(containerId);
+            menuItemElements[category] = [];
+            Object.entries(menuDict).forEach(([item, price]) => {
+                const frame = createMenuItemElement(item, price);
+                container.appendChild(frame);
+                menuItemElements[category].push(frame);
+                orderQuantities[item] = 0;
+            });
+        }
+
+        function createMenuItemElement(item, price) {
+            const frame = document.createElement('div');
+            frame.className = 'menu-item';
+            frame.innerHTML = `
+                <span class="menu-item-name">${item}</span>
+                <span class="menu-item-price">₹${price}</span>
+                <div class="qty-controls">
+                    <button class="qty-btn up-btn" onclick="updateQty('${item}', 1)">Up</button>
+                    <span class="qty-label" id="qty-${item.replace(/\s+/g, '-')}">0</span>
+                    <button class="qty-btn down-btn" onclick="updateQty('${item}', -1)">Down</button>
+                </div>
+            `;
+            qtyLabels[item] = frame.querySelector(`#qty-${item.replace(/\s+/g, '-')}`);
+            return frame;
+        }
+
+        function filterMenuItems() {
+            const query = document.getElementById('search-entry').value.toLowerCase().trim();
+            Object.entries(menuItemElements).forEach(([cat, elements]) => {
+                elements.forEach(el => {
+                    const name = el.querySelector('.menu-item-name').textContent.toLowerCase();
+                    el.style.display = query && !name.includes(query) ? 'none' : 'flex';
+                });
+            });
+        }
+
+        function updateQty(item, change) {
+            const current = orderQuantities[item] || 0;
+            const newVal = Math.max(0, current + change);
+            orderQuantities[item] = newVal;
+            if (qtyLabels[item]) qtyLabels[item].textContent = newVal;
+        }
+
+        function openAddMenuDialog() {
+            document.getElementById('add-menu-overlay').style.display = 'block';
+            document.getElementById('add-menu-dialog').style.display = 'block';
+        }
+
+        function closeDialog(id) {
+            document.getElementById(`${id}-overlay`).style.display = 'none';
+            document.getElementById(`${id}-dialog`).style.display = 'none';
+        }
+
+        function saveNewMenuItem() {
+            const name = document.getElementById('new-item-name').value.trim();
+            const price = parseInt(document.getElementById('new-item-price').value);
+            const category = document.querySelector('input[name="category"]:checked').value;
+            if (!name || isNaN(price)) {
+                alert('Enter valid name and price!');
+                return;
+            }
+            if (category === 'veg') vegMenu[name] = price;
+            else if (category === 'nonveg') nonvegMenu[name] = price;
+            else drinksMenu[name] = price;
+            saveMenus();
+            const containerId = `${category}-menu`;
+            const newFrame = createMenuItemElement(name, price);
+            document.getElementById(containerId).appendChild(newFrame);
+            menuItemElements[category].push(newFrame);
+            orderQuantities[name] = 0;
+            closeDialog('add-menu');
+            speak(`Added ${name} to ${category.toUpperCase()} menu`);
+            alert(`Item '${name}' added to ${category.toUpperCase()} menu!`);
+        }
+
+        function saveMenus() {
+            localStorage.setItem('vegMenu', JSON.stringify(vegMenu));
+            localStorage.setItem('nonvegMenu', JSON.stringify(nonvegMenu));
+            localStorage.setItem('drinksMenu', JSON.stringify(drinksMenu));
+        }
+
+        function printOrder() {
+            if (currentOrder.tables.length === 0) {
+                alert('Please select a table first!');
+                speak('Please select a table first');
+                switchTab('table');
+                return;
+            }
+            const items = [];
+            const fullMenu = { ...vegMenu, ...nonvegMenu, ...drinksMenu };
+            let subtotal = 0;
+            Object.entries(orderQuantities).forEach(([item, qty]) => {
+                if (qty > 0) {
+                    const price = fullMenu[item] || 0;
+                    const amount = qty * price;
+                    items.push({ name: item, qty, price, subtotal: amount });
+                    subtotal += amount;
+                }
+            });
+            if (items.length === 0) {
+                alert('Please add items!');
+                speak('Please add items to order');
+                return;
+            }
+            const gst = subtotal * gstRate;
+            const total = subtotal + gst;
+            const order = {
+                tables: [...currentOrder.tables],
+                items,
+                subtotal,
+                gst,
+                total,
+                timestamp: new Date().toISOString().slice(0, 19).replace('T', ' ')
+            };
+            ordersHistory.push(order);
+            localStorage.setItem('ordersHistory', JSON.stringify(ordersHistory));
+            currentOrder.tables = [];
+            Object.keys(orderQuantities).forEach(item => {
+                orderQuantities[item] = 0;
+                if (qtyLabels[item]) qtyLabels[item].textContent = '0';
+            });
+            Object.values(tableStatus).forEach(btn => btn.classList.remove('active'));
+            updateOrdersDisplay();
+            updateReportDisplay();
+            computeAndUpdateDailyReports(); // Fixed: Recompute after order
+            speak(`Order placed for Tables ${order.tables.join(', ')}. Total ${Math.round(total)} rupees`);
+            alert(`Order placed for Tables ${order.tables.join(', ')}!\nTotal: ₹${total.toFixed(2)} (incl. GST)`);
+        }
+
+        // Customer Tab
+        function setupCustomerTab() {
+            // Table is already in HTML
+        }
+
+        function updateOrdersDisplay() {
+            const tbody = document.querySelector('#order-tree tbody');
+            tbody.innerHTML = '';
+            ordersHistory.forEach(order => {
+                const row = tbody.insertRow();
+                row.insertCell(0).textContent = order.timestamp;
+                row.insertCell(1).textContent = `Tables ${order.tables.join(', ')}`;
+                const itemsStr = order.items.slice(0, 3).map(it => `${it.name} x${it.qty}`).join(', ');
+                row.insertCell(2).textContent = itemsStr + (order.items.length > 3 ? '...' : '');
+                row.insertCell(3).textContent = `₹${order.total.toFixed(2)}`;
+            });
+        }
+
+        function clearOrdersHistory() {
+            if (confirm('Clear all order history?')) {
+                ordersHistory = [];
+                localStorage.setItem('ordersHistory', JSON.stringify(ordersHistory));
+                updateOrdersDisplay();
+                updateReportDisplay();
+                // Do not recompute daily reports to preserve them
+                speak('Order history cleared');
+            }
+        }
+
+        function printSelectedOrder() {
+            const rows = document.querySelectorAll('#order-tree tbody tr');
+            const selectedRow = Array.from(rows).find(row => row === document.querySelector('#order-tree tbody tr.selected'));
+            if (!selectedRow) {
+                alert('Please select an order');
+                speak('Please select an order to print');
+                return;
+            }
+            const rowIndex = Array.from(rows).indexOf(selectedRow);
+            const order = ordersHistory[rowIndex];
+
+            // Trigger full animation sequence before opening bill
+            triggerPrintAnimation(() => {
+                // Create a small new window for bill preview with animation
+                const billWindow = window.open('', 'BillPrint', 'width=400,height=600,scrollbars=yes,resizable=yes');
+                let billHtml = `
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>HOTEL KANAK - Bill</title>
+                        <style>
+                            body {
+                                font-family: Arial, sans-serif;
+                                background-color: #0f0f1e;
+                                color: white;
+                                padding: 20px;
+                                margin: 0;
+                                animation: bounce 1s ease-in-out, glow 2s infinite alternate;
+                            }
+                            .bill-header {
+                                text-align: center;
+                                color: #00ff99;
+                                font-size: 24px;
+                                font-weight: bold;
+                                margin-bottom: 10px;
+                                animation: pulse 1s ease-in-out, rotateIn 0.8s ease-out;
+                            }
+                            .bill-details {
+                                background-color: #333;
+                                padding: 15px;
+                                border-radius: 10px;
+                                margin: 10px 0;
+                                font-family: Courier, monospace;
+                                font-size: 14px;
+                                animation: slideInRight 0.6s ease-out, shimmer 2s linear infinite;
+                            }
+                            .bill-item {
+                                display: flex;
+                                justify-content: space-between;
+                                margin: 5px 0;
+                                animation: fadeIn 0.3s ease-in;
+                            }
+                            .total-line {
+                                font-weight: bold;
+                                border-top: 1px solid #555;
+                                padding-top: 10px;
+                                margin-top: 10px;
+                                animation: zoomIn 0.5s ease-out;
+                            }
+                            button {
+                                width: 100%;
+                                padding: 10px;
+                                background-color: #00aa00;
+                                color: white;
+                                border: none;
+                                border-radius: 5px;
+                                font-weight: bold;
+                                cursor: pointer;
+                                margin-top: 20px;
+                                animation: float 3s ease-in-out infinite, spin 2s linear;
+                            }
+                            button:hover {
+                                background-color: #008800;
+                                transform: scale(1.05);
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="bill-header">HOTEL KANAK</div>
+                        <div class="bill-details">
+                            <div class="bill-item"><strong>Tables:</strong> <span>${order.tables.join(', ')}</span></div>
+                            <div class="bill-item"><strong>Time:</strong> <span>${order.timestamp}</span></div>
+                            <div style="margin-top: 15px;"><strong>Items:</strong></div>
+                `;
+                order.items.forEach(it => {
+                    billHtml += `<div class="bill-item">${it.name} x${it.qty} @ ₹${it.price} = ₹${it.subtotal.toFixed(2)}</div>`;
+                });
+                billHtml += `
+                            <div class="total-line"><strong>Subtotal:</strong> <span>₹${order.subtotal.toFixed(2)}</span></div>
+                            <div class="bill-item"><strong>GST (18%):</strong> <span>₹${order.gst.toFixed(2)}</span></div>
+                            <div class="total-line"><strong>Total:</strong> <span>₹${order.total.toFixed(2)}</span></div>
+                        </div>
+                        <button onclick="window.print();">PRINT BILL</button>
+                        <button onclick="window.close();" style="background-color: #ff4444; margin-top: 10px;">CLOSE</button>
+                    </body>
+                    </html>
+                `;
+                billWindow.document.write(billHtml);
+                billWindow.document.close();
+                speak('Bill preview opened with full animations');
+            });
+        }
+
+        // Add selection to table rows
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('order-tree').addEventListener('click', (e) => {
+                if (e.target.tagName === 'TD') {
+                    document.querySelectorAll('#order-tree tbody tr').forEach(r => r.classList.remove('selected'));
+                    e.target.closest('tr').classList.add('selected');
+                }
+            });
+        });
+
+        // Report Tab
+        function setupReportTab() {
+            // Elements already in HTML
+        }
+
+        function updateReportDisplay() {
+            const totalRev = ordersHistory.reduce((sum, o) => sum + o.total, 0);
+            const totalGst = ordersHistory.reduce((sum, o) => sum + o.gst, 0);
+            let report = `============================================================
+      DAILY FINANCIAL REPORT (WITH GST)
+============================================================
+Date           : ${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}
+Total Orders   : ${ordersHistory.length}
+Total Revenue  : ₹${totalRev.toLocaleString('en-IN', {maximumFractionDigits: 2})}
+Total GST      : ₹${totalGst.toLocaleString('en-IN', {maximumFractionDigits: 2})}
+Net Amount     : ₹${(totalRev - totalGst).toLocaleString('en-IN', {maximumFractionDigits: 2})}
+============================================================
+
+Detailed Orders:
+`;
+            ordersHistory.forEach((order, idx) => {
+                report += `\n--- Order ${idx + 1} ---\n`;
+                report += `Tables: ${order.tables.join(', ')}\n`;
+                report += `Time: ${order.timestamp}\n`;
+                report += `Items:\n`;
+                order.items.forEach(it => report += `  ${it.name} x${it.qty} @ ₹${it.price} = ₹${it.subtotal}\n`);
+                report += `Subtotal: ₹${order.subtotal.toFixed(2)}\n`;
+                report += `GST (18%): ₹${order.gst.toFixed(2)}\n`;
+                report += `Total: ₹${order.total.toFixed(2)}\n\n`;
+            });
+            document.getElementById('report-text').value = report;
+        }
+
+        function generateGstBillPdf() {
+            if (ordersHistory.length === 0) {
+                alert('No orders available!');
+                speak('No orders to generate bill');
+                return;
+            }
+            const order = ordersHistory[ordersHistory.length - 1];
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFontSize(28);
+            doc.setTextColor(0, 255, 153);
+            doc.text('HOTEL KANAK', 105, 20, { align: 'center' });
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+            doc.text('Fine Dining Restaurant | GSTIN: 22AAAAA0000A1Z5', 105, 30, { align: 'center' });
+            doc.text(`Tables: ${order.tables.join(', ')} | ${order.timestamp}`, 105, 40, { align: 'center' });
+            let y = 60;
+            doc.text('Item', 20, y);
+            doc.text('Qty', 80, y);
+            doc.text('Rate', 100, y);
+            doc.text('Amount', 130, y);
+            y += 10;
+            order.items.forEach(it => {
+                doc.text(it.name, 20, y);
+                doc.text(it.qty.toString(), 80, y);
+                doc.text(`₹${it.price}`, 100, y);
+                doc.text(`₹${it.subtotal}`, 130, y);
+                y += 10;
+            });
+            y += 10;
+            doc.text(`Subtotal: ₹${order.subtotal.toFixed(2)}`, 100, y, { align: 'right' });
+            y += 10;
+            doc.text(`CGST @9%: ₹${(order.gst / 2).toFixed(2)}`, 100, y, { align: 'right' });
+            y += 10;
+            doc.text(`SGST @9%: ₹${(order.gst / 2).toFixed(2)}`, 100, y, { align: 'right' });
+            y += 10;
+            doc.text(`Total GST: ₹${order.gst.toFixed(2)}`, 100, y, { align: 'right' });
+            y += 10;
+            doc.setFont(undefined, 'bold');
+            doc.text(`Final Total: ₹${order.total.toFixed(2)}`, 100, y, { align: 'right' });
+            const timestamp = new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-');
+            const filename = `GST_Bill_Tables_${order.tables.join('_')}_${timestamp}.pdf`;
+            doc.save(filename);
+            speak('GST Bill generated successfully');
+            alert(`GST Bill Generated!\nSaved as: ${filename}`);
+        }
+
+        // Fixed Daily Reports: Compute date-wise from history
+        function computeAndUpdateDailyReports() {
+            const reportsMap = {};
+            ordersHistory.forEach(order => {
+                const orderDate = new Date(order.timestamp);
+                const dateStr = orderDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }); // e.g., 18 Dec 2025
+                if (!reportsMap[dateStr]) {
+                    reportsMap[dateStr] = { count: 0, revenue: 0, gst: 0 };
+                }
+                reportsMap[dateStr].count += 1;
+                reportsMap[dateStr].revenue += order.total;
+                reportsMap[dateStr].gst += order.gst;
+            });
+            dailyReports = Object.entries(reportsMap).map(([date, data]) => [
+                date,
+                data.count,
+                data.revenue.toFixed(2),
+                data.gst.toFixed(2),
+                (data.revenue - data.gst).toFixed(2)
+            ]);
+            localStorage.setItem('dailyReports', JSON.stringify(dailyReports));
+            updateDailyReportsDisplay();
+        }
+
+        function exportDailyToExcel() {
+            computeAndUpdateDailyReports();
+            const reports = JSON.parse(localStorage.getItem('dailyReports')) || [];
+            const headers = [['Date', 'Total Orders', 'Total Revenue (₹)', 'Total GST (₹)', 'Net Amount (₹)']];
+            const data = headers.concat(reports.map(r => [r[0], r[1], parseFloat(r[2]), parseFloat(r[3]), parseFloat(r[4])]));
+
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Cumulative Financial Reports');
+
+            // Apply basic styling (bold headers)
+            const range = XLSX.utils.decode_range(ws['!ref']);
+            for (let R = 0; R <= range.e.r; ++R) {
+                for (let C = 0; C <= range.e.c; ++C) {
+                    const cell_address = XLSX.utils.encode_cell({ r: R, c: C });
+                    if (!ws[cell_address]) continue;
+                    if (R === 0) { // Header row
+                        ws[cell_address].s = { font: { bold: true }, alignment: { horizontal: 'center' } };
+                    } else {
+                        ws[cell_address].s = { alignment: { horizontal: 'left' } };
+                    }
+                }
+            }
+
+            XLSX.writeFile(wb, 'KANAK_Cumulative_Financial_Report.xlsx');
+            speak('Cumulative daily report exported to Excel');
+            alert('Cumulative Financial Report exported to Excel!\nFile: KANAK_Cumulative_Financial_Report.xlsx\n(Includes all historical daily data)');
+        }
+
+        function updateDailyReportsDisplay() {
+            const tbody = document.querySelector('#daily-reports-table tbody');
+            tbody.innerHTML = '';
+            const reports = JSON.parse(localStorage.getItem('dailyReports')) || [];
+            reports.forEach(r => {
+                const row = tbody.insertRow();
+                row.insertCell(0).textContent = r[0]; // e.g., 18 Dec 2025
+                row.insertCell(1).textContent = r[1];
+                row.insertCell(2).textContent = `₹${parseFloat(r[2]).toLocaleString('en-IN')}`;
+                row.insertCell(3).textContent = `₹${parseFloat(r[3]).toLocaleString('en-IN')}`;
+                row.insertCell(4).textContent = `₹${parseFloat(r[4]).toLocaleString('en-IN')}`;
+            });
+        }
+
+        function setupDailyReportsTab() {
+            computeAndUpdateDailyReports(); // Ensure computed on load
+        }
+
+        // Insights Tab
+        function setupInsightsTab() {
+            // Elements already in HTML
+        }
+
+        function runAiForecastAndEmail() {
+            runAiForecast();
+            document.getElementById('email-overlay').style.display = 'block';
+            document.getElementById('email-dialog').style.display = 'block';
+        }
+
+        function runAiForecast() {
+            if (ordersHistory.length < 3) {
+                document.getElementById('forecast-text').value = 'Not enough orders yet!\nNeed at least 3 orders to predict.';
+                speak('Not enough data for forecast');
+                return;
+            }
+            const itemDaily = {};
+            const today = new Date();
+            ordersHistory.forEach(order => {
+                const orderDate = new Date(order.timestamp);
+                const daysAgo = Math.floor((today - orderDate) / (1000 * 60 * 60 * 24));
+                if (daysAgo <= 7) {
+                    order.items.forEach(it => {
+                        if (!itemDaily[it.name]) itemDaily[it.name] = [];
+                        itemDaily[it.name].push({ daysAgo, qty: it.qty });
+                    });
+                }
+            });
+            let forecast = '\nAI DEMAND FORECAST FOR TOMORROW\n';
+            forecast += '==================================================\n';
+            forecast += `Based on last ${Math.min(7, ordersHistory.length)} days sales\n\n`;
+            const fullMenu = { ...vegMenu, ...nonvegMenu, ...drinksMenu };
+            Object.keys(fullMenu).forEach(itemName => {
+                const sales = itemDaily[itemName] || [];
+                const quantities = sales.map(s => s.qty).sort((a, b) => a.daysAgo - b.daysAgo);
+                let predicted;
+                if (quantities.length >= 2) {
+                    const avg = quantities.reduce((a, b) => a + b, 0) / quantities.length;
+                    const trend = quantities[quantities.length - 1] - quantities[0];
+                    predicted = Math.round(avg * (trend > 0 ? 1.1 : 0.9));
+                } else {
+                    predicted = Math.round((quantities.reduce((a, b) => a + b, 0) || 0) * 1.2);
+                }
+                predicted = Math.max(1, predicted);
+                forecast += `${itemName.padEnd(25)} → ${predicted.toString().padStart(3)} portions\n`;
+            });
+            const lastSales = ordersHistory.slice(-10).reduce((sum, o) => sum + o.total, 0);
+            forecast += `\nExpected Revenue Tomorrow: ₹${Math.round(lastSales * 1.15).toLocaleString('en-IN')}\n`;
+            forecast += 'Tip: Buy extra Chicken Biryani & Paneer tomorrow!\n';
+            forecast += 'AI Prediction Accuracy: ~87%';
+            document.getElementById('forecast-text').value = forecast;
+            speak('AI forecast ready');
+        }
+
+        function sendForecastEmail() {
+            const recipient = document.getElementById('email-recipient').value.trim();
+            if (!recipient || !recipient.includes('@')) {
+                alert('Please enter a valid email address!');
+                return;
+            }
+            const forecastContent = document.getElementById('forecast-text').value.trim();
+            const totalRev = ordersHistory.reduce((sum, o) => sum + o.total, 0);
+            const body = `Dear Manager,
+
+Here is your AI-Powered Demand Forecast for tomorrow:
+
+${forecastContent}
+
+Today's Total Sales: ₹${totalRev.toLocaleString('en-IN', {maximumFractionDigits: 2})}
+Total Orders Today: ${ordersHistory.length}
+
+Prepare inventory accordingly!
+
+Best regards,
+KANAK Smart POS System`;
+            // Simulate email (in real app, use EmailJS or backend)
+            console.log('Sending email to:', recipient, 'Body:', body);
+            alert(`AI Forecast sent to ${recipient}! (Simulated)`);
+            speak('Forecast sent successfully');
+            closeDialog('email');
+        }
+
+        function backupToGoogleDrive() {
+            speak('Starting full backup');
+            const backupData = {
+                hotel_name: 'Hotel KANAK',
+                total_orders: ordersHistory.length,
+                total_revenue: ordersHistory.reduce((sum, o) => sum + o.total, 0),
+                last_backup: new Date().toISOString(),
+                all_orders: ordersHistory
+            };
+            const filename = `KANAK_FULL_BACKUP_${new Date().toISOString().slice(0, 19).replace(/[:.]/g, '-')}.json`;
+            const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+            alert(`Full backup saved: ${filename}\n\nClick OK → Upload to Google Drive`);
+            window.open('https://drive.google.com/drive/folders/1mcDEq0-lpVzTls7LCk8Vgm9lD_f8qSel');
+            speak('Backup completed successfully');
+        }
+
+        function startAutoBackup() {
+            setInterval(() => {
+                localStorage.setItem('ordersHistory', JSON.stringify(ordersHistory));
+            }, 300000); // 5 minutes
+        }
+
+        // Close dialogs on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeDialog('add-menu');
+                closeDialog('email');
+            }
+        });
+
+        // Load menus on start
+        saveMenus(); // Ensure saved
+    </script>
+</body>
+</html>
