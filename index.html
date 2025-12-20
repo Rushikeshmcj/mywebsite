@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel KANAK - Restaurant Management System</title>
-    <link rel="icon" type="image/jpeg"https://github.com/Rushikeshmcj/mywebsite/blob/c3aa102dfc05e3172a2a00e111dce128014688c1/images.jpg">
+    <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/Rushikeshmcj/mywebsite/c3aa102dfc05e3172a2a00e111dce128014688c1/images.jpg">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -27,7 +27,7 @@
             width: 100vw;
             height: 100vh;
             background-color: #2a2a3a;
-            background-image: url("https://github.com/Rushikeshmcj/mywebsite/blob/f12700a4229c926aea722b992891fafef410365b/kanak%20hotel%20part.jpg");
+            background-image: url("https://raw.githubusercontent.com/Rushikeshmcj/mywebsite/f12700a4229c926aea722b992891fafef410365b/kanak%20hotel%20part.jpg");
             background-size: cover;
             background-position: center;
             display: flex;
@@ -576,7 +576,6 @@
             <button id="login-submit">SUBMIT</button>
         </div>
     </div>
-
     <div id="main-app">
         <div id="tab-buttons">
             <button class="tab-btn active" data-tab="table">Table Management</button>
@@ -586,7 +585,6 @@
             <button class="tab-btn" data-tab="insights">AI Forecast & Cloud</button>
             <button class="tab-btn" data-tab="daily-reports">Daily Financial Reports</button>
         </div>
-
         <div id="table-tab" class="tab-content active">
             <h1 class="section-title">Table Management - Select a Table</h1>
             <div class="btn-frame">
@@ -596,13 +594,12 @@
             <div style="display: flex;">
                 <div class="table-grid" id="table-grid"></div>
                 <div class="right-panel">
-                    <img id="logo-img" src="D:/PYTHON folder/KANAK/images.jpg" alt="Logo" onerror="showLogoPlaceholder();">
+                    <img id="logo-img" src="https://raw.githubusercontent.com/Rushikeshmcj/mywebsite/c3aa102dfc05e3172a2a00e111dce128014688c1/images.jpg" alt="Logo" onerror="showLogoPlaceholder();">
                     <div class="hotel-name">KANAK Restaurant</div>
                     <div id="time-label">Current Time: --:--:--</div>
                 </div>
             </div>
         </div>
-
         <div id="menu-tab" class="tab-content">
             <h1 class="section-title">Menu Management</h1>
             <div style="display: flex; align-items: center; margin-bottom: 20px;">
@@ -621,7 +618,6 @@
             <div id="drinks-menu" class="menu-category"></div>
             <button class="btn-primary" style="width: 100%; padding: 15px; font-size: 20px; font-weight: bold; height: 50px; margin-top: 20px;" onclick="printOrder()">PRINT ORDER</button>
         </div>
-
         <div id="customer-tab" class="tab-content">
             <h1 class="section-title">Customer Orders History</h1>
             <div class="btn-frame">
@@ -634,7 +630,6 @@
                 <tbody></tbody>
             </table>
         </div>
-
         <div id="report-tab" class="tab-content">
             <h1 class="section-title">Financial Report & GST Billing</h1>
             <div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
@@ -643,7 +638,6 @@
             <textarea class="report-text" id="report-text" readonly></textarea>
             <p style="text-align: center; font-size: 16px; color: #8888ff; margin-top: 20px;">Graphical Analytics Coming Soon...</p>
         </div>
-
         <div id="insights-tab" class="tab-content">
             <h1 class="section-title" style="color: #00fffa;">AI Demand Forecast & Cloud Backup</h1>
             <div style="background-color: #333; padding: 20px; border-radius: 5px; margin-bottom: 20px; animation: pulse 2s infinite;">
@@ -660,7 +654,6 @@
                 <p style="font-size: 12px; color: #aaaaaa; margin-top: 10px;">Your data is auto-saved locally every 5 minutes<br>Cloud backup creates encrypted copy on your Google Drive</p>
             </div>
         </div>
-
         <div id="daily-reports-tab" class="tab-content">
             <h1 class="section-title">Cumulative Daily Financial Reports</h1>
             <div class="btn-frame">
@@ -672,7 +665,6 @@
             </table>
         </div>
     </div>
-
     <!-- Add Menu Dialog -->
     <div class="dialog-overlay" id="add-menu-overlay" onclick="closeDialog('add-menu')"></div>
     <div class="dialog" id="add-menu-dialog" style="width: 350px;">
@@ -689,7 +681,6 @@
         <input type="number" id="new-item-price" class="login-input" placeholder="Enter price">
         <button class="btn-primary" style="width: 100%; margin-top: 20px; padding: 15px; height: 45px; font-size: 14px; font-weight: bold;" onclick="saveNewMenuItem()">SAVE</button>
     </div>
-
     <!-- Email Dialog -->
     <div class="dialog-overlay" id="email-overlay" onclick="closeDialog('email')"></div>
     <div class="dialog" id="email-dialog" style="width: 500px;">
@@ -698,7 +689,6 @@
         <input type="email" id="email-recipient" class="login-input" style="min-width: 400px;" placeholder="example@gmail.com">
         <button class="btn-primary" style="width: 100%; margin-top: 20px; padding: 15px; height: 50px; font-size: 18px; font-weight: bold;" onclick="sendForecastEmail()">SEND EMAIL NOW</button>
     </div>
-
     <script>
         // Data Storage (using localStorage for persistence)
         let ordersHistory = JSON.parse(localStorage.getItem('ordersHistory')) || [];
@@ -708,7 +698,6 @@
         let orderQuantities = {};
         let qtyLabels = {};
         let menuItemElements = { veg: [], nonveg: [], drinks: [] };
-
         // Menu Items
         let vegMenu = JSON.parse(localStorage.getItem('vegMenu')) || {
             "Butter Roti": 40, "Paneer Butter Masala": 230, "Veg Biryani": 180, "Dal Tadka": 120, "Aloo Paratha": 80
@@ -719,9 +708,7 @@
         let drinksMenu = JSON.parse(localStorage.getItem('drinksMenu')) || {
             "Coca Cola": 50, "Red Wine (Glass)": 500, "Fresh Lime Soda": 60, "Mineral Water": 30, "Mocktail": 150
         };
-
         const gstRate = 0.18;
-
         // Voice Engine (Web Speech API)
         function speak(text) {
             console.log(`Voice Alert: ${text}`);
@@ -732,7 +719,6 @@
                 speechSynthesis.speak(utterance);
             }
         }
-
         // Sound Effect Function (Simple beep using Web Audio API)
         function playPrintSound() {
             if ('AudioContext' in window) {
@@ -749,14 +735,12 @@
                 oscillator.stop(audioCtx.currentTime + 0.5);
             }
         }
-
         // Ball Throw Animation with Confetti
         function triggerPrintAnimation(callback) {
             // Create ball
             const ball = document.createElement('div');
             ball.className = 'ball-throw';
             document.body.appendChild(ball);
-
             // Add confetti pieces
             for (let i = 0; i < 20; i++) {
                 const confetti = document.createElement('div');
@@ -767,7 +751,6 @@
                 confetti.style.animationDuration = `${1 + Math.random()}s`;
                 document.body.appendChild(confetti);
             }
-
             // Chain animations: ball throw, then glow and pulse on body, then callback
             ball.addEventListener('animationend', () => {
                 document.body.style.animation = 'glow 1s infinite alternate, pulse 0.5s ease-in-out';
@@ -778,11 +761,9 @@
                     if (callback) callback();
                 }, 1000);
             });
-
             // Play sound
             playPrintSound();
         }
-
         // Logo Placeholder
         function showLogoPlaceholder() {
             const img = document.getElementById('logo-img');
@@ -793,7 +774,6 @@
             placeholder.textContent = 'KANAK\nLOGO';
             panel.insertBefore(placeholder, document.querySelector('.hotel-name'));
         }
-
         // Login
         document.getElementById('login-submit').addEventListener('click', () => {
             const username = document.getElementById('user-entry').value;
@@ -809,7 +789,6 @@
                 speak('Invalid credentials');
             }
         });
-
         // Setup Main App
         function setupMainApp() {
             setupTabButtons();
@@ -825,7 +804,6 @@
             startTimeTimer();
             startAutoBackup();
         }
-
         // Tab Switching
         function switchTab(tabName) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -835,7 +813,6 @@
             const activeContent = document.getElementById(`${tabName}-tab`);
             if (activeContent) activeContent.classList.add('active');
         }
-
         function setupTabButtons() {
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
@@ -844,7 +821,6 @@
                 });
             });
         }
-
         // Table Tab
         function setupTableTab() {
             const grid = document.getElementById('table-grid');
@@ -862,7 +838,6 @@
                 showLogoPlaceholder();
             }
         }
-
         function toggleTable(tableNum) {
             const current = tableStatus[tableNum];
             if (currentOrder.tables.includes(tableNum)) {
@@ -881,7 +856,6 @@
                 switchTab('menu');
             }
         }
-
         function clearAllTables() {
             if (confirm('Clear all table selections and reset all buttons?')) {
                 currentOrder.tables = [];
@@ -889,14 +863,12 @@
                 speak('All tables cleared');
             }
         }
-
         // Time Timer
         function startTimeTimer() {
             setInterval(() => {
                 document.getElementById('time-label').textContent = `Current Time: ${new Date().toLocaleTimeString()}`;
             }, 1000);
         }
-
         // Menu Tab
         function setupMenuTab() {
             setupInnerTabButtons();
@@ -905,7 +877,6 @@
             renderMenuSection('drinks', drinksMenu, 'drinks-menu');
             document.getElementById('search-entry').addEventListener('input', filterMenuItems);
         }
-
         function setupInnerTabButtons() {
             document.querySelectorAll('.inner-tab-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
@@ -917,7 +888,6 @@
                 });
             });
         }
-
         function renderMenuSection(category, menuDict, containerId) {
             const container = document.getElementById(containerId);
             menuItemElements[category] = [];
@@ -928,7 +898,6 @@
                 orderQuantities[item] = 0;
             });
         }
-
         function createMenuItemElement(item, price) {
             const frame = document.createElement('div');
             frame.className = 'menu-item';
@@ -944,7 +913,6 @@
             qtyLabels[item] = frame.querySelector(`#qty-${item.replace(/\s+/g, '-')}`);
             return frame;
         }
-
         function filterMenuItems() {
             const query = document.getElementById('search-entry').value.toLowerCase().trim();
             Object.entries(menuItemElements).forEach(([cat, elements]) => {
@@ -954,24 +922,20 @@
                 });
             });
         }
-
         function updateQty(item, change) {
             const current = orderQuantities[item] || 0;
             const newVal = Math.max(0, current + change);
             orderQuantities[item] = newVal;
             if (qtyLabels[item]) qtyLabels[item].textContent = newVal;
         }
-
         function openAddMenuDialog() {
             document.getElementById('add-menu-overlay').style.display = 'block';
             document.getElementById('add-menu-dialog').style.display = 'block';
         }
-
         function closeDialog(id) {
             document.getElementById(`${id}-overlay`).style.display = 'none';
             document.getElementById(`${id}-dialog`).style.display = 'none';
         }
-
         function saveNewMenuItem() {
             const name = document.getElementById('new-item-name').value.trim();
             const price = parseInt(document.getElementById('new-item-price').value);
@@ -993,13 +957,11 @@
             speak(`Added ${name} to ${category.toUpperCase()} menu`);
             alert(`Item '${name}' added to ${category.toUpperCase()} menu!`);
         }
-
         function saveMenus() {
             localStorage.setItem('vegMenu', JSON.stringify(vegMenu));
             localStorage.setItem('nonvegMenu', JSON.stringify(nonvegMenu));
             localStorage.setItem('drinksMenu', JSON.stringify(drinksMenu));
         }
-
         function printOrder() {
             if (currentOrder.tables.length === 0) {
                 alert('Please select a table first!');
@@ -1047,12 +1009,10 @@
             speak(`Order placed for Tables ${order.tables.join(', ')}. Total ${Math.round(total)} rupees`);
             alert(`Order placed for Tables ${order.tables.join(', ')}!\nTotal: ₹${total.toFixed(2)} (incl. GST)`);
         }
-
         // Customer Tab
         function setupCustomerTab() {
             // Table is already in HTML
         }
-
         function updateOrdersDisplay() {
             const tbody = document.querySelector('#order-tree tbody');
             tbody.innerHTML = '';
@@ -1065,7 +1025,6 @@
                 row.insertCell(3).textContent = `₹${order.total.toFixed(2)}`;
             });
         }
-
         function clearOrdersHistory() {
             if (confirm('Clear all order history?')) {
                 ordersHistory = [];
@@ -1076,7 +1035,6 @@
                 speak('Order history cleared');
             }
         }
-
         function printSelectedOrder() {
             const rows = document.querySelectorAll('#order-tree tbody tr');
             const selectedRow = Array.from(rows).find(row => row === document.querySelector('#order-tree tbody tr.selected'));
@@ -1087,7 +1045,6 @@
             }
             const rowIndex = Array.from(rows).indexOf(selectedRow);
             const order = ordersHistory[rowIndex];
-
             // Trigger full animation sequence before opening bill
             triggerPrintAnimation(() => {
                 // Create a small new window for bill preview with animation
@@ -1181,7 +1138,6 @@
                 speak('Bill preview opened with full animations');
             });
         }
-
         // Add selection to table rows
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('order-tree').addEventListener('click', (e) => {
@@ -1191,25 +1147,22 @@
                 }
             });
         });
-
         // Report Tab
         function setupReportTab() {
             // Elements already in HTML
         }
-
         function updateReportDisplay() {
             const totalRev = ordersHistory.reduce((sum, o) => sum + o.total, 0);
             const totalGst = ordersHistory.reduce((sum, o) => sum + o.gst, 0);
             let report = `============================================================
       DAILY FINANCIAL REPORT (WITH GST)
 ============================================================
-Date           : ${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}
-Total Orders   : ${ordersHistory.length}
-Total Revenue  : ₹${totalRev.toLocaleString('en-IN', {maximumFractionDigits: 2})}
-Total GST      : ₹${totalGst.toLocaleString('en-IN', {maximumFractionDigits: 2})}
-Net Amount     : ₹${(totalRev - totalGst).toLocaleString('en-IN', {maximumFractionDigits: 2})}
+Date : ${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}
+Total Orders : ${ordersHistory.length}
+Total Revenue : ₹${totalRev.toLocaleString('en-IN', {maximumFractionDigits: 2})}
+Total GST : ₹${totalGst.toLocaleString('en-IN', {maximumFractionDigits: 2})}
+Net Amount : ₹${(totalRev - totalGst).toLocaleString('en-IN', {maximumFractionDigits: 2})}
 ============================================================
-
 Detailed Orders:
 `;
             ordersHistory.forEach((order, idx) => {
@@ -1217,14 +1170,13 @@ Detailed Orders:
                 report += `Tables: ${order.tables.join(', ')}\n`;
                 report += `Time: ${order.timestamp}\n`;
                 report += `Items:\n`;
-                order.items.forEach(it => report += `  ${it.name} x${it.qty} @ ₹${it.price} = ₹${it.subtotal}\n`);
+                order.items.forEach(it => report += ` ${it.name} x${it.qty} @ ₹${it.price} = ₹${it.subtotal}\n`);
                 report += `Subtotal: ₹${order.subtotal.toFixed(2)}\n`;
                 report += `GST (18%): ₹${order.gst.toFixed(2)}\n`;
                 report += `Total: ₹${order.total.toFixed(2)}\n\n`;
             });
             document.getElementById('report-text').value = report;
         }
-
         function generateGstBillPdf() {
             if (ordersHistory.length === 0) {
                 alert('No orders available!');
@@ -1271,7 +1223,6 @@ Detailed Orders:
             speak('GST Bill generated successfully');
             alert(`GST Bill Generated!\nSaved as: ${filename}`);
         }
-
         // Fixed Daily Reports: Compute date-wise from history
         function computeAndUpdateDailyReports() {
             const reportsMap = {};
@@ -1295,17 +1246,14 @@ Detailed Orders:
             localStorage.setItem('dailyReports', JSON.stringify(dailyReports));
             updateDailyReportsDisplay();
         }
-
         function exportDailyToExcel() {
             computeAndUpdateDailyReports();
             const reports = JSON.parse(localStorage.getItem('dailyReports')) || [];
             const headers = [['Date', 'Total Orders', 'Total Revenue (₹)', 'Total GST (₹)', 'Net Amount (₹)']];
             const data = headers.concat(reports.map(r => [r[0], r[1], parseFloat(r[2]), parseFloat(r[3]), parseFloat(r[4])]));
-
             const ws = XLSX.utils.aoa_to_sheet(data);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'Cumulative Financial Reports');
-
             // Apply basic styling (bold headers)
             const range = XLSX.utils.decode_range(ws['!ref']);
             for (let R = 0; R <= range.e.r; ++R) {
@@ -1319,12 +1267,10 @@ Detailed Orders:
                     }
                 }
             }
-
             XLSX.writeFile(wb, 'KANAK_Cumulative_Financial_Report.xlsx');
             speak('Cumulative daily report exported to Excel');
             alert('Cumulative Financial Report exported to Excel!\nFile: KANAK_Cumulative_Financial_Report.xlsx\n(Includes all historical daily data)');
         }
-
         function updateDailyReportsDisplay() {
             const tbody = document.querySelector('#daily-reports-table tbody');
             tbody.innerHTML = '';
@@ -1338,22 +1284,18 @@ Detailed Orders:
                 row.insertCell(4).textContent = `₹${parseFloat(r[4]).toLocaleString('en-IN')}`;
             });
         }
-
         function setupDailyReportsTab() {
             computeAndUpdateDailyReports(); // Ensure computed on load
         }
-
         // Insights Tab
         function setupInsightsTab() {
             // Elements already in HTML
         }
-
         function runAiForecastAndEmail() {
             runAiForecast();
             document.getElementById('email-overlay').style.display = 'block';
             document.getElementById('email-dialog').style.display = 'block';
         }
-
         function runAiForecast() {
             if (ordersHistory.length < 3) {
                 document.getElementById('forecast-text').value = 'Not enough orders yet!\nNeed at least 3 orders to predict.';
@@ -1397,7 +1339,6 @@ Detailed Orders:
             document.getElementById('forecast-text').value = forecast;
             speak('AI forecast ready');
         }
-
         function sendForecastEmail() {
             const recipient = document.getElementById('email-recipient').value.trim();
             if (!recipient || !recipient.includes('@')) {
@@ -1407,16 +1348,11 @@ Detailed Orders:
             const forecastContent = document.getElementById('forecast-text').value.trim();
             const totalRev = ordersHistory.reduce((sum, o) => sum + o.total, 0);
             const body = `Dear Manager,
-
 Here is your AI-Powered Demand Forecast for tomorrow:
-
 ${forecastContent}
-
 Today's Total Sales: ₹${totalRev.toLocaleString('en-IN', {maximumFractionDigits: 2})}
 Total Orders Today: ${ordersHistory.length}
-
 Prepare inventory accordingly!
-
 Best regards,
 KANAK Smart POS System`;
             // Simulate email (in real app, use EmailJS or backend)
@@ -1425,7 +1361,6 @@ KANAK Smart POS System`;
             speak('Forecast sent successfully');
             closeDialog('email');
         }
-
         function backupToGoogleDrive() {
             speak('Starting full backup');
             const backupData = {
@@ -1447,13 +1382,11 @@ KANAK Smart POS System`;
             window.open('https://drive.google.com/drive/folders/1mcDEq0-lpVzTls7LCk8Vgm9lD_f8qSel');
             speak('Backup completed successfully');
         }
-
         function startAutoBackup() {
             setInterval(() => {
                 localStorage.setItem('ordersHistory', JSON.stringify(ordersHistory));
             }, 300000); // 5 minutes
         }
-
         // Close dialogs on escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
@@ -1461,13 +1394,8 @@ KANAK Smart POS System`;
                 closeDialog('email');
             }
         });
-
         // Load menus on start
         saveMenus(); // Ensure saved
     </script>
 </body>
 </html>
-
-
-
-
